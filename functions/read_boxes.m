@@ -5,7 +5,6 @@
 % USAGE: [bid,cent,b_area,verts,iface] = read_boxes(fnm);
 
 function [nbox, nface, bid,cent,b_area,verts,iface, b_botz, ibox] = read_boxes(fnm);
-
 fid = fopen(fnm,'r');
 
 verts{1} = [];
