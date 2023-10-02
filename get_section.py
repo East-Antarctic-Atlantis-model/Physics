@@ -1,11 +1,16 @@
 import xarray as xr
 import netCDF4
+import datetime
 import sys
 
 
 # Define the URL of the OPeNDAP server and the name of the variable to extract
-url = sys.argv[0]
-var_name = sys.argv[1]
+url = sys.argv[1]
+# url = 'https://dapds00.nci.org.au/thredds/dodsC/cj50/access-om2/raw-output/access-om2-01/01deg_jra55v140_iaf/output165/ocean/ocean-3d-u-1-daily-mean-ym_1999_05.nc'
+print('print url', url)
+var_name = str(sys.argv[2])
+print('var_name', var_name)
+# var_name = 'u'
 # print(name_nc_out)
 # Open the netCDF file using xarray
 ds = xr.open_dataset(url)
@@ -22,8 +27,15 @@ data = ds[var_name].sel(yu_ocean=slice(lat_min, lat_max),
 # dimensions:
 new_lat = ds.yu_ocean.sel(yu_ocean=slice(lat_min, lat_max)).values
 new_lon = ds.xu_ocean.sel(xu_ocean=slice(lon_min, lon_max)).values
+# convert ds['time'] to datetime.datetime object
+time_str = str(ds['time'].values[0])
+# remove trailing zeros from microseconds field
+time_str = time_str[:-3] + time_str[-3:].rstrip('0')
+dt = datetime.datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%S.%f')
+# convert datetime.datetime object to netCDF4 time number
 time_num = netCDF4.date2num(
-    ds['time'], units='days since 1900-01-01 00:00:00', calendar=ds['time'].calendar_type)
+    dt, units='days since 1900-01-01 00:00:00', calendar=ds['time'].calendar_type)
+
 print('Step 02 extracting data done!')
 
 # Create a new netCDF file
