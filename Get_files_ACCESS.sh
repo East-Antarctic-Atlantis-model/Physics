@@ -1,6 +1,6 @@
 # Path: Get_files_ACCESS.sh
 #!/bin/bash
-conda activate GBR_env
+module load python
 cd /temporal_raw/
 year=1998
 folder=163
