@@ -51,7 +51,7 @@ addpath('/datasets/work/oa-alantis/work/EA_model/Physics/functions/')
 %%%       GLOBAL VARIABLES    %%%
 % Get the boxes  %%
 % Read the BMG file to get the value of the parameter from the polygons
-BGM_JFR_ll = '/datasets/work/oa-alantis/work/EA_model/Physics/EAAM_29_polygons_xy.bgm';
+BGM_JFR_ll = '/datasets/work/oa-alantis/work/EA_model/Physics/EAA29_ll_v2.bgm';
 [nbox,nface,bid,cent,b_area,vert, iface, botz] = read_boxes(BGM_JFR_ll);
 [nulr,nupt1,nupt2] = read_faces2(nbox, nface, bid, vert, iface, BGM_JFR_ll);
 iface      = iface;  %% Id of the faces
