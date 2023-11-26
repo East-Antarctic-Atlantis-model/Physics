@@ -101,21 +101,21 @@ write_trans_file_EAAM(pt1, pt2, lr, nctime, Tfinal, fcid, guard)
 %% variables by layer
 %% Variables
 %% for y = 2015:????
-varn = {'wVelocity';  'salinity';  'temperature'}
-direc = ('/datasets/work/oa-gladstone-mr/work/oceano_data_Salish_sea/Raw_Variables_data/');
-fll = '/datasets/work/oa-gladstone-mr/work/oceano_data_Salish_sea/Codes_transport/mesh.nc';
-cd (['/datasets/work/oa-gladstone-mr/work/oceano_data_Salish_sea/Temp2/']); %% temporal foldet to store the temporal files
+varn = {'salt';  'temp';  'wt'; 'iceh'}
+direc = ('/datasets/work/oa-alantis/work/Hydro_EAA/');
+cd (['/datasets/work/oa-alantis/work/EA_model/Variable_raw/']); %% temporal foldet to store the temporal files
 for v  =  1 : length(varn)
     avname  = char(varn(v));
-    if~(v == 1)
-        files = dir([direc, '2016-*_Raw_variables.nc']);
+    
+    if~(strcmp(avname,'iceh'))
+        files=dir([direc, 'ocean-3d-', avname,'*.nc']);
     else
-        files = dir([direc, '2016-*_WRaw_variables.nc']);
+        files = dir([direc,'iceh.*.nc']);
     end
 
     for nfile = 1 : length(files)
         fnm   = [direc, files(nfile).name];
-        box_av_SS(vert, avname, dlev, fnm, fll, nfile)
+        box_av_EAAM(vert, avname, dlev, fnm, nfile)
     end
     t_files = dir(['*', avname, '_SS_Second_step.mat']);
     for f = 1 : length(t_files)
@@ -135,9 +135,9 @@ for v  =  1 : length(varn)
 end
 %% end
 % put all the variables together
-temp = load(['/datasets/work/oa-gladstone-mr/work/oceano_data_Salish_sea/Temp2/Av_temperature.mat']);
-salt = load(['/datasets/work/oa-gladstone-mr/work/oceano_data_Salish_sea/Temp2/Av_salinity.mat']);
-vert = load(['/datasets/work/oa-gladstone-mr/work/oceano_data_Salish_sea/Temp2/Av_wVelocity.mat']);
+temp = load(['/datasets/work/oa-alantis/work/EA_model/Variable_raw/Av_temp.mat']);
+salt = load(['/datasets/work/oa-alantis/work/EA_model/Variable_raw/Av_salt.mat']);
+vert = load(['/datasets/work/oa-alantis/work/EA_model/Variable_raw/Av_wt.mat']);
 
 %% Writing variables
 temperature = temp.Av_final;
@@ -145,5 +145,5 @@ salinity    = salt.Av_final;
 vertical    = vert.Av_final;
 %% Saving the netdf file
 nctime      = temp.nctime;
-guard = (['/datasets/work/oa-gladstone-mr/work/oceano_data_Salish_sea/Final/SS_Variables_2016.nc']);
+guard = (['/datasets/work/oa-alantis/work/EA_model/Final_raw_netcdf_EAAM/EAAM_Variables_1999.nc']);
 write_av_var_new(nctime, bid, temperature, salinity,  vertical, guard);

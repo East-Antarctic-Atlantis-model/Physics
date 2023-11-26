@@ -2,16 +2,17 @@
 %      GBR Model
 %
 %%      Modified by:  (Javier Porobic)  %%
-clear
-close all
-addpath('/datasets/work/oa-alantis/work/EA_model/Physics/functions/')
-
-%%%       GLOBAL VARIABLES    %%%
+% clear
+% close all
+% addpath('/datasets/work/oa-alantis/work/EA_model/Physics/functions/')
+% 
+% %%%       GLOBAL VARIABLES    %%%
 % Get the boxes  %%
 % Read the BMG file to get the value of the parameter from the polygons
-BGM_JFR_ll = '/datasets/work/oa-alantis/work/EA_model/Physics/20190812_Salish_Sea_ll_fixed.bgm';
-[nbox,nface,bid,cent,b_area,vert, iface, botz] = read_boxes(BGM_JFR_ll);
-[nulr,nupt1,nupt2] = read_faces2(nbox, nface, bid, vert, iface, BGM_JFR_ll);
+BGM_EAA_ll = '/datasets/work/oa-alantis/work/EA_model/Physics/EAA29_ll_v2.bgm';
+
+[nbox,nface,bid,cent,b_area,vert, iface, botz] = read_boxes(BGM_EAA_ll);
+[nulr,nupt1,nupt2] = read_faces2(nbox, nface, bid, vert, iface, BGM_EAA_ll);
 iface      = iface;  %% Id of the faces
 lr         = nulr;   %% Neightbourn Layers
 pt1        = nupt1;  %% Face 1
@@ -34,7 +35,7 @@ filesu = dir([direc, 'ocean-3d-u*.nc']); %% U and V in teh same file
 filesv = dir([direc, 'ocean-3d-v*.nc']); %% U and V in teh same file
 fnmu= [direc, filesu(1).name]
 fnmv= [direc, filesv(1).name]
-function [T, tims] = transport_SS(vert, pt1, pt2, dlev, dinc, rimn, fnmu, fnmv, f);
+function [T, tims] = transport_EAAM(vert, pt1, pt2, dlev, dinc, rimn, fnmu, fnmv, f);
     %% Global Variables  %%
     warning('off','all');
     nc   = netcdf.open(fnmu);
@@ -50,7 +51,7 @@ function [T, tims] = transport_SS(vert, pt1, pt2, dlev, dinc, rimn, fnmu, fnmv, 
     if nargin < 4 | isempty(dinc)
         dinc = 0.1;
     end
-    file1 = (['SS_first_Step.mat']);
+    file1 = (['EAAM_first_Step.mat']);
     if ~exist(file1, 'file')  % This part need to be run only ones. its related
                               % with the general model configuration.
         disp(['Using hydro file ' fnmu]);
@@ -73,6 +74,7 @@ function [T, tims] = transport_SS(vert, pt1, pt2, dlev, dinc, rimn, fnmu, fnmv, 
         % Prepare the integration grid for each face
         ngrd = 0;
         for ifc = 1:nfc  % Number of faces
+            display(ifc)
             x  = [pt1(ifc,1) pt2(ifc,1)];
             y  = [pt1(ifc,2) pt2(ifc,2)];
             yd = y(2) - y(1); %% Distance between points
@@ -94,8 +96,11 @@ function [T, tims] = transport_SS(vert, pt1, pt2, dlev, dinc, rimn, fnmu, fnmv, 
             end
             yi   = yd / rinc;
             Y    = (y(1) + (yi / 2)) : yi : (y(2) - (yi / 2));
+            total_length = length(Y);
             xi   = xd / (lcor * rinc);
+            X = seq = linspace((x(1) + (xi / 2)), (x(2) - (xi / 2)), total_length);
             X    = (x(1) + (xi / 2)) : xi : (x(2) - (xi / 2));
+            length(X)
             ninc = length(Y);
             if ninc==0
                 ninc = length(X);
@@ -148,7 +153,7 @@ function [T, tims] = transport_SS(vert, pt1, pt2, dlev, dinc, rimn, fnmu, fnmv, 
         numtx = num2str(f);
     end 
         
-    file2 = ([numtx, 'SS_second_Step.mat']);
+    file2 = ([numtx, 'EAAM_second_Step.mat']);
     if ~exist(file2, 'file')
         ncu     = netcdf.open(fnmu, 'NC_NOWRITE');
         ncv     = netcdf.open(fnmv, 'NC_NOWRITE');
@@ -175,7 +180,6 @@ function [T, tims] = transport_SS(vert, pt1, pt2, dlev, dinc, rimn, fnmu, fnmv, 
             ylat = lat(imodxy);
             disp(['Analysing Time step ', num2str(id)])
             for layer = 1:nlay
-                layer
                 layer_u_data = mean(udata(zc <= -dlev(layer) & zc >= -dlev(layer+1), ...
                                                   :, :), 1, 'double','omitnan');
                 layer_v_data = mean(vdata(zc <= -dlev(layer) & zc >= -dlev(layer+1), ...
