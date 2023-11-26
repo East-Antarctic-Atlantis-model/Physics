@@ -1,20 +1,20 @@
 #!/bin/bash
-sudo make install -C /home/por07g/Documents/PhD/Oceanography/physics/Codes/Contruct/HydroConstruct/trunk/
+sudo make install -C /home/por07g/Documents/Atlantis_codes/Hydroconstruct/HydroConstruct/HydroConstruct/trunk
 if [ $? -eq 0 ] ; then
     #valgrind --leak-check=full --log-file=Valgrind.%p --show-reachable=yes
     #gdb --args
-    /home/por07g/Documents/Atlantis_codes/Hydroconstruct/HydroConstruct/HydroConstruct/trunk/HydroConstruct/HydroConstruct -f flowout.cdf -t tempout.cdf -s saltout.cdf -r parameters.prm
+    /home/por07g/Documents/Atlantis_codes/Hydroconstruct/HydroConstruct/HydroConstruct/trunk/HydroConstruct -f flowout.cdf -t tempout.cdf -s saltout.cdf -r parameters.prm
 
-    mkdir Output_salish_sea
-    mv saltout.cdf  Output_salish_sea
-    mv tempout.cdf  Output_salish_sea
-    mv flowout.cdf  Output_salish_sea/flowout.cdf
-    mv volume1.cdf  Output_salish_sea/volume.cdf
+    mkdir out_EAAM
+    mv saltout.cdf  out_EAAM
+    mv tempout.cdf  out_EAAM
+    mv flowout.cdf  out_EAAM/flowout.cdf
+    mv volume1.cdf  out_EAAM/volume.cdf
 
-    cd  Output_salish_sea
-    ncgen -o SS_temp.nc tempout.cdf
-    ncgen -o SS_salt.nc saltout.cdf
-    ncgen -o SS_hydro.nc flowout.cdf
+    cd  out_EAAM
+    ncgen -o EAAM_temp.nc tempout.cdf
+    ncgen -o EAAM_salt.nc saltout.cdf
+    ncgen -o EAAM_hydro.nc flowout.cdf
 
     cd ..
 

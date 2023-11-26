@@ -22,10 +22,10 @@ rewind 1
 generic 1
 
 # Geometry file being used by boxmodel
-geofile SS_xy.bgm
+geofile EAA29_xy_v2.bgm
 
 # File with lat-long coordinates of the faces in it - only really needed if using netcdf input data
-llgeofile SS_ll.bgm
+llgeofile EAA29_ll_v2.bgm
 
 # Recycle flows through time
 recycle_flow 0
@@ -40,42 +40,45 @@ vert_diffusion 0
 back_diffusion 0
 
 # Reference year - exchanges etc are referenced from 07-01-2000 (MM-DD HH:MM:SS) of this year
-reference_year 2015
+reference_year 01-01-1999
 
 # Start time of output file (days) starts on the 07-Jan-2000 11:48:16
 tstart 0
 
 # End time of output file (days) ends on the 30-Dec-2008 12:22:24
-tstop 726 #363
+tstop 364 #363
 
 # Time step of the output file (seconds) <=> %the time step is 1 day in the model
-dt 21600
+dt 86400
 
 # Reset time so start at time zero rather than t = .... in file
 reset_time 0
 
 # Total (maxiumum) number of water column layers
-wcnz 6
+wcnz 10
 
 # Default water column layer thickness
-default_layer_dz 6
-25    25    50   150   150   300
+default_layer_dz 10
+20 30 50 100 100 100 350 250 1000 3000
+
 
 # Number of water column layers per box
-numlayers 130
-5 2 3 3 3 2 3 2 3 3 3 3 0 1 3 1 1 0 3 3 1 1 0 1 0 0 1 0 2 0 0 3 2 4 3 3 3 3 2 3 2 0 0 0 0 0 0 0 0 0 0 0 0 0 2 1 0 3 3 0 2 0 3 3 3 0 3 0 3 0 0 0 3 2 2 2 0 0 0 3 3 4 4 4 5 4 5 0 4 0 4 3 4 0 4 0 3 0 4 0 0 4 4 4 3 5 5 5 4 6 0 4 6 4 4 4 4 5 4 4 4 5 5 4 6 0 0 0 0 4
+numlayers 29
+10 7 7 7 7 7 7 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10
 
 # Boundary flag and boundary type (0 = non-boundary, 1 = normal boundary, 2 = absorptive, 3 = reflective)
-boundaries 130
-1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+boundaries 29
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1
+
 
 # In addition to any scaling below, flows are area corrected to try and avoid hyperdiffusion (0 = no, 1 = yes, 2 = yes, with respect to the shape of the box)
 area_correct_flow 1
 area_correct_vflow 0
 
 # Scaling of flow per box (e.g. -1.0 to reverse flows)
-box_scaling 130
-1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+box_scaling 29
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+
 
 ## Horizontal flow information
 # Number of destination cells
@@ -97,9 +100,8 @@ unit_type 1
 numoutfile 1
 
 ## Hydrodynamic files
-nhdfiles 2
-trans0.name SS_Transport_2015.nc
-trans1.name SS_Transport_2016.nc
+nhdfiles 1
+trans0.name EAAM_Transport_1999.nc
 
 # Number of faces representing estuaries where need to "by hand" specify flows
 num_estuaries 0
@@ -117,9 +119,8 @@ river_outfluxes 1
 0
 
 ## Vertical exchange files
-nvhdfiles 2
-vtrans0.name SS_Variables_2015.nc
-vtrans1.name SS_Variables_2016.nc
+nvhdfiles 1
+vtrans0.name EAAM_Variables_1999.nc
 
 ## Temperature and Salinity file information
 # Temperature missing data values (temperatures < than -(this value) will be ignored)
@@ -133,9 +134,9 @@ salt_missing_data -1e20
 tsflagflux 0
 
 # Temperature and salinity profile files
-ntsfiles 2
-tempsalt0.name SS_Variables_2015.nc
-tempsalt1.name SS_Variables_2016.nc
+ntsfiles 1
+tempsalt0.name EAAM_Variables_1999.nc
+
 
 pad_time 0
 ph_missing_data 0
