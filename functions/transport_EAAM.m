@@ -7,11 +7,12 @@
 % addpath('/datasets/work/oa-alantis/work/EA_model/Physics/functions/')
 % 
 % %%%       GLOBAL VARIABLES    %%%
-% % Get the boxes  %%
-% % Read the BMG file to get the value of the parameter from the polygons
-% BGM_JFR_ll = '/datasets/work/oa-alantis/work/EA_model/Physics/20190812_Salish_Sea_ll_fixed.bgm';
-% [nbox,nface,bid,cent,b_area,vert, iface, botz] = read_boxes(BGM_JFR_ll);
-% [nulr,nupt1,nupt2] = read_faces2(nbox, nface, bid, vert, iface, BGM_JFR_ll);
+% Get the boxes  %%
+% Read the BMG file to get the value of the parameter from the polygons
+% BGM_EAA_ll = '/datasets/work/oa-alantis/work/EA_model/Physics/EAA29_ll_v2.bgm';
+% 
+% [nbox,nface,bid,cent,b_area,vert, iface, botz] = read_boxes(BGM_EAA_ll);
+% [nulr,nupt1,nupt2] = read_faces2(nbox, nface, bid, vert, iface, BGM_EAA_ll);
 % iface      = iface;  %% Id of the faces
 % lr         = nulr;   %% Neightbourn Layers
 % pt1        = nupt1;  %% Face 1
@@ -59,6 +60,11 @@ function [T, tims] = transport_EAAM(vert, pt1, pt2, dlev, dinc, rimn, fnmu, fnmv
         nlay = length(dint);
         tims = netcdf.getVar(nc, netcdf.inqVarID(nc, 'time'));
         lon_vec  = netcdf.getVar(nc, netcdf.inqVarID(nc, 'xu_ocean'), 'double');
+        %% the original grid goes form -280 to 80 E and we need to transform that to -180 to 180E
+        %% bringging all the values from 80 to 440 
+        lon_vec(lon_vec < 0) = lon_vec(lon_vec < 0) + 360;
+        %% get the values from -180 to 180
+        lon_vec(lon_vec > 180) = lon_vec(lon_vec > 180)-360;
         lat_vec  = netcdf.getVar(nc, netcdf.inqVarID(nc, 'yu_ocean'),'double');
         % Create a grid for latitudes and longitudes
         % Doing this to speed up calculation and seatching for nans
@@ -94,8 +100,9 @@ function [T, tims] = transport_EAAM(vert, pt1, pt2, dlev, dinc, rimn, fnmu, fnmv
             end
             yi   = yd / rinc;
             Y    = (y(1) + (yi / 2)) : yi : (y(2) - (yi / 2));
+            total_length = length(Y);
             xi   = xd / (lcor * rinc);
-            X    = (x(1) + (xi / 2)) : xi : (x(2) - (xi / 2));
+            X = linspace((x(1) + (xi / 2)), (x(2) - (xi / 2)), total_length);
             ninc = length(Y);
             if ninc==0
                 ninc = length(X);
