@@ -62,4 +62,4 @@ new_ds = xr.Dataset({'u': new_u}, coords={
                     'time': ds['time'], 'st_ocean': ds['st_ocean'], 'xu_ocean': new_lon_sorted, 'yu_ocean': ds['yu_ocean']})
 
 # Save the new Dataset to a netCDF file
-new_ds.to_netcdf('temporal_input/' + variable + out_name, engine='h5netcdf')
+new_ds.to_netcdf('/datasets/work/oa-alantis/work/Hydro_EAA/sampled_outputs/' + variable + out_name, engine='h5netcdf')
