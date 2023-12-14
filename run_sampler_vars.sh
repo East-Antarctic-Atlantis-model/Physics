@@ -66,7 +66,7 @@ python sample_netcdf_variables.py ${files_salt[task_id]} 'salt'
 echo 'Doing temperature'
 python sample_netcdf_variables.py ${files_temp[task_id]} 'temp'
 echp "Doing vertical velocity"
-python sample_netcdf_variables_wt.py ${files_wt[task_id]} 'wt'
+python sample_netcdf_variables.py ${files_wt[task_id]} 'wt'
 
 
 echo "done!"
