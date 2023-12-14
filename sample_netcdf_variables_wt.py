@@ -11,6 +11,9 @@ variable = sys.argv[2]
 out_name = filename[-11:]
 # Now you can use the filename to open the dataset
 ds = xr.open_dataset(filename)
+if variable == 'wt':
+    # Rename 'sw_ocean' to 'st_ocean' in 'ds'
+    ds = ds.rename({'sw_ocean': 'st_ocean'})
 
 # Define the minimum and maximum longitude and latitude
 # These values are used to create a rectangle to zoom in on the region of interest (the EAAM)

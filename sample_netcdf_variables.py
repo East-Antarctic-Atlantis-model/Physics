@@ -4,13 +4,16 @@ import sys
 
 # filename = '/home/por07g/Documents/Projects/Supervision/Ilaria/tools/temporal_input/ocean-3d-v-1-daily-mean-ym_1999_01.nc'
 # filename = '/home/por07g/Documents/Projects/Supervision/Ilaria/tools/temporal_input/ocean-3d-salt-1-daily-mean-ym_1999_01.nc'
-# getting the file name from the command line
+# # getting the file name from the command line
 # variable = 'salt'
 filename = sys.argv[1]
 variable = sys.argv[2]
 out_name = filename[-11:]
 # Now you can use the filename to open the dataset
 ds = xr.open_dataset(filename)
+if variable == 'wt':
+    # Rename 'sw_ocean' to 'st_ocean' in 'ds'
+    ds = ds.rename({'sw_ocean': 'st_ocean'})
 
 # Define the minimum and maximum longitude and latitude
 # These values are used to create a rectangle to zoom in on the region of interest (the EAAM)
@@ -55,6 +58,10 @@ for t in range(ds.dims['time']):
 new_xu_ocean = new_lon_sorted[:u_sorted_reduced_array.shape[3]]
 new_yu_ocean = ds['yt_ocean'].sel(yt_ocean=slice(min_lat, max_lat))
 
+# Rename 'xt_ocean' to 'xu_ocean' in 'u_sorted_reduced'
+# this will helpt to have the same name for the coordinates in the new_u DataArray
+u_sorted_reduced = u_sorted_reduced.rename(
+    {'xt_ocean': 'xu_ocean', 'yt_ocean': 'yu_ocean'})
 # Create a new xarray.DataArray with the new_u DataArray and the new coordinates
 new_u = xr.DataArray(u_sorted_reduced_array, dims=ds[variable].dims, coords={
                      'time': ds['time'], 'st_ocean': ds['st_ocean'], 'xu_ocean': new_xu_ocean, 'yu_ocean': new_yu_ocean})
