@@ -35,14 +35,14 @@ count_lon = np.count_nonzero(
     (new_lon_sorted > min_lon) & (new_lon_sorted < max_lon))
 count_lat = np.count_nonzero((lat > min_lat) & (lat < max_lat))
 u_sorted_reduced_array = np.empty(
-    (len(ds['time']), len(ds['st_ocean']), count_lat, count_lon))
+    (len(ds['time']), len(ds['sw_ocean']), count_lat, count_lon))
 
 # Loop through all time and st_ocean values
 for t in range(ds.dims['time']):
-    for d in range(ds.dims['st_ocean']):
+    for d in range(ds.dims['sw_ocean']):
         # Extract one time step and one depth of the u array
         u_sorted = ds[variable].isel(
-            time=t, st_ocean=d, xt_ocean=sorted_indices)
+            time=t, sw_ocean=d, xt_ocean=sorted_indices)
         # Replace the 'xu_ocean' values in 'u_sorted' with 'new_lon_sorted'
         u_sorted['xt_ocean'] = new_lon_sorted
         # Reduce the size of the u_sorted array based on the minimum and maximum longitude and latitude
@@ -57,11 +57,11 @@ new_yu_ocean = ds['yt_ocean'].sel(yt_ocean=slice(min_lat, max_lat))
 
 # Create a new xarray.DataArray with the new_u DataArray and the new coordinates
 new_u = xr.DataArray(u_sorted_reduced_array, dims=ds[variable].dims, coords={
-                     'time': ds['time'], 'st_ocean': ds['st_ocean'], 'xu_ocean': new_xu_ocean, 'yu_ocean': new_yu_ocean})
+                     'time': ds['time'], 'st_ocean': ds['sw_ocean'], 'xu_ocean': new_xu_ocean, 'yu_ocean': new_yu_ocean})
 
 # Create a new xarray.Dataset with the new_u DataArray and the new coordinates
 new_ds = xr.Dataset({variable: new_u}, coords={
-                    'time': ds['time'], 'st_ocean': ds['st_ocean'], 'xu_ocean': new_xu_ocean, 'yu_ocean': new_yu_ocean})
+                    'time': ds['time'], 'st_ocean': ds['sw_ocean'], 'xu_ocean': new_xu_ocean, 'yu_ocean': new_yu_ocean})
 
 # Save the new Dataset to a netCDF file
 new_ds.to_netcdf('/datasets/work/oa-alantis/work/Hydro_EAA/sampled_outputs/' +

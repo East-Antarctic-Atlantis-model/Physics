@@ -41,20 +41,11 @@ function [av,nav] = box_av_SS(vert, varn, dlev, fnm, fln)
     dint = diff(dlev);
     nlay = length(dint);
     lon_vec  = netcdf.getVar(nc, netcdf.inqVarID(nc, 'xt_ocean'), 'double');
-    %% the original grid goes form -280 to 80 E and we need to transform that to -180 to 180E
-    %% bringging all the values from 80 to 440 
-    lon_vec(lon_vec < 0) = lon_vec(lon_vec < 0) + 360;
-    %% get the values from -180 to 180
-    lon_vec(lon_vec > 180) = lon_vec(lon_vec > 180)-360;
     lat_vec  = netcdf.getVar(nc, netcdf.inqVarID(nc, 'yt_ocean'),'double');
     [lon, lat]=meshgrid(lon_vec,lat_vec);
     %if biol
     tims = netcdf.getVar(nc, netcdf.inqVarID(nc, 'time'));
-    if~(strcmp(varn,'wt'))
-        zc   =  -netcdf.getVar(nc, netcdf.inqVarID(nc, 'st_ocean'), 'double');
-    else 
-        zc = -netcdf.getVar(nc, netcdf.inqVarID(nc, 'sw_ocean'), 'double');
-    end
+    zc   =  -netcdf.getVar(nc, netcdf.inqVarID(nc, 'st_ocean'), 'double');
     ntm  = length(tims);
     nbox = length(vert);
     %% just for the file name
@@ -113,9 +104,9 @@ if ~exist(file2, 'file') % This part need to be run only ones. its related
     for id = 0 : (ntm - 1)
         disp(['Analysing time step ', num2str(id)])
         if strcmp( varn, 'SG_N') || strcmp( varn, 'EpiPAR') %% ICE?
-            varData = permute(netcdf.getVar(nc, netcdf.inqVarID(nc, varn), [0, 0, 0, id],[3600, 2700, 75, 1],'double'), [2 1]);
+            varData = permute(netcdf.getVar(nc, netcdf.inqVarID(nc, varn), [0, 0, 0, id],[719, 458, 75, 1],'double'), [2 1]);
         else
-            varData = permute(netcdf.getVar(nc, netcdf.inqVarID(nc, varn), [0, 0, 0, id],[3600, 2700, 75, 1],'double'), [3 2 1]);
+            varData = permute(netcdf.getVar(nc, netcdf.inqVarID(nc, varn), [0, 0, 0, id],[719, 458, 75, 1],'double'), [3 2 1]);
         end
         imodxy = find(~isnan(lon));
         xlon   = lon(imodxy);

@@ -70,10 +70,11 @@ dlev = [0  20 50 100 200 300 400 750 1000 2000 5000]; %% This structure is relat
 
 %% Running the model - saving by years %%
 % Transport between layers
-direc = (['/datasets/work/oa-alantis/work/Hydro_EAA/']);
+direc = (['/datasets/work/oa-alantis/work/Hydro_EAA/sampled_outputs/']);
 %direc = (['/home/por07g/Documents/2019/Oil_spill/Hidro_Data/first_hidro/']);
-filesu = dir([direc, 'ocean-3d-u*.nc']); %% U and V in teh same file
-filesv = dir([direc, 'ocean-3d-v*.nc']); %% U and V in teh same file
+filesu = dir([direc, 'u_*.nc']); %% U and V in teh same file
+filesv = dir([direc, 'v_*.nc']); %% U and V in teh same file
+cd("/datasets/work/oa-alantis/work/EA_model/Output_temporal/")
 %% for year = 2015 : ????
 for f  =  1 : length(filesu)
         fnmu         = [direc, filesu(f).name];

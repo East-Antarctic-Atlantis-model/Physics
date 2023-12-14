@@ -9,10 +9,10 @@
 % %%%       GLOBAL VARIABLES    %%%
 % Get the boxes  %%
 % Read the BMG file to get the value of the parameter from the polygons
-% BGM_EAA_ll = '/datasets/work/oa-alantis/work/EA_model/Physics/EAA29_ll_v2.bgm';
-% 
-% [nbox,nface,bid,cent,b_area,vert, iface, botz] = read_boxes(BGM_EAA_ll);
-% [nulr,nupt1,nupt2] = read_faces2(nbox, nface, bid, vert, iface, BGM_EAA_ll);
+
+% BGM_JFR_ll = '/datasets/work/oa-alantis/work/EA_model/Physics/EAA29_ll_v2.bgm';
+% [nbox,nface,bid,cent,b_area,vert, iface, botz] = read_boxes(BGM_JFR_ll);
+% [nulr,nupt1,nupt2] = read_faces2(nbox, nface, bid, vert, iface, BGM_JFR_ll);
 % iface      = iface;  %% Id of the faces
 % lr         = nulr;   %% Neightbourn Layers
 % pt1        = nupt1;  %% Face 1
@@ -29,12 +29,13 @@
 % 
 % %% Running the model - saving by years %%
 % % Transport between layers
-% direc = (['/datasets/work/oa-alantis/work/Hydro_EAA/']);
+% direc = (['/datasets/work/oa-alantis/work/Hydro_EAA/sampled_outputs/']);
 % %direc = (['/home/por07g/Documents/2019/Oil_spill/Hidro_Data/first_hidro/']);
-% filesu = dir([direc, 'ocean-3d-u*.nc']); %% U and V in teh same file
-% filesv = dir([direc, 'ocean-3d-v*.nc']); %% U and V in teh same file
+% filesu = dir([direc, 'u_*.nc']); %% U and V in teh same file
+% filesv = dir([direc, 'v_*.nc']); %% U and V in teh same file
 % fnmu= [direc, filesu(1).name]
 % fnmv= [direc, filesv(1).name]
+% f=1
 function [T, tims] = transport_EAAM(vert, pt1, pt2, dlev, dinc, rimn, fnmu, fnmv, f);
     %% Global Variables  %%
     warning('off','all');
@@ -60,11 +61,6 @@ function [T, tims] = transport_EAAM(vert, pt1, pt2, dlev, dinc, rimn, fnmu, fnmv
         nlay = length(dint);
         tims = netcdf.getVar(nc, netcdf.inqVarID(nc, 'time'));
         lon_vec  = netcdf.getVar(nc, netcdf.inqVarID(nc, 'xu_ocean'), 'double');
-        %% the original grid goes form -280 to 80 E and we need to transform that to -180 to 180E
-        %% bringging all the values from 80 to 440 
-        lon_vec(lon_vec < 0) = lon_vec(lon_vec < 0) + 360;
-        %% get the values from -180 to 180
-        lon_vec(lon_vec > 180) = lon_vec(lon_vec > 180)-360;
         lat_vec  = netcdf.getVar(nc, netcdf.inqVarID(nc, 'yu_ocean'),'double');
         % Create a grid for latitudes and longitudes
         % Doing this to speed up calculation and seatching for nans
@@ -167,8 +163,8 @@ function [T, tims] = transport_EAAM(vert, pt1, pt2, dlev, dinc, rimn, fnmu, fnmv
             %% Because of memory issues I decide to slice the reading by time step
             %% The original dimension arrange is [Lon Lat Lev Time], so I re
             %% arrange the dimension by [Time Lev(z) Lat Lon]
-            u  = permute(netcdf.getVar(ncu, netcdf.inqVarID(ncu,'u'),[0,0,0,id],[3600, 2700, 75, 1],'double'), [3 2 1]);
-            v  = permute(netcdf.getVar(ncv, netcdf.inqVarID(ncv,'v'),[0,0,0,id],[3600, 2700, 75, 1],'double'), [3 2 1]);
+            u  = permute(netcdf.getVar(ncu, netcdf.inqVarID(ncu,'u'),[0,0,0,id],[719, 458, 75, 1],'double'), [3 2 1]);
+            v  = permute(netcdf.getVar(ncv, netcdf.inqVarID(ncv,'v'),[0,0,0,id],[719, 458, 75, 1],'double'), [3 2 1]);
             U  = zeros(nlay, ngrd);
             V  = zeros(nlay, ngrd);
             u(u>=1.0000e+20) = nan;
