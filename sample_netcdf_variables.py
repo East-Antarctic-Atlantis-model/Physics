@@ -3,11 +3,11 @@ import numpy as np
 import sys
 
 # filename = '/home/por07g/Documents/Projects/Supervision/Ilaria/tools/temporal_input/ocean-3d-v-1-daily-mean-ym_1999_01.nc'
-filename = '/home/por07g/Documents/Projects/Supervision/Ilaria/tools/temporal_input/ocean-3d-salt-1-daily-mean-ym_1999_01.nc'
+# filename = '/home/por07g/Documents/Projects/Supervision/Ilaria/tools/temporal_input/ocean-3d-salt-1-daily-mean-ym_1999_01.nc'
 # getting the file name from the command line
-variable = 'salt'
-# filename = sys.argv[1]
-# variable = sys.argv[2]
+# variable = 'salt'
+filename = sys.argv[1]
+variable = sys.argv[2]
 out_name = filename[-11:]
 # Now you can use the filename to open the dataset
 ds = xr.open_dataset(filename)
