@@ -40,8 +40,8 @@ function [av,nav] = box_av_SS(vert, varn, dlev, fnm, fln)
     nc   = netcdf.open(fnm);
     dint = diff(dlev);
     nlay = length(dint);
-    lon_vec  = netcdf.getVar(nc, netcdf.inqVarID(nc, 'xt_ocean'), 'double');
-    lat_vec  = netcdf.getVar(nc, netcdf.inqVarID(nc, 'yt_ocean'),'double');
+    lon_vec  = netcdf.getVar(nc, netcdf.inqVarID(nc, 'xu_ocean'), 'double');
+    lat_vec  = netcdf.getVar(nc, netcdf.inqVarID(nc, 'yu_ocean'),'double');
     [lon, lat]=meshgrid(lon_vec,lat_vec);
     %if biol
     tims = netcdf.getVar(nc, netcdf.inqVarID(nc, 'time'));
