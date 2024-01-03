@@ -97,19 +97,19 @@ end
 %% don´t do the transformation
 guard = (['/datasets/work/oa-alantis/work/EA_model/Final_raw_netcdf_EAAM/EAAM_Transport.nc']);
 write_trans_file_EAAM(pt1, pt2, lr, nctime, Tfinal, fcid, guard)
-
-
+plot(Tfinal(:,3,2),'r')
+image(squeeze(Tfinal(:,300,:)))
 %% variables by layer
 %% Variables
 %% for y = 2015:????
-varn = {'salt';  'temp';  'wt'; 'iceh'}
-direc = ('/datasets/work/oa-alantis/work/Hydro_EAA/');
+varn = {'salt';  'temp';  'wt'}
+direc = (['/datasets/work/oa-alantis/work/Hydro_EAA/sampled_outputs/']);
 cd (['/datasets/work/oa-alantis/work/EA_model/Variable_raw/']); %% temporal foldet to store the temporal files
 for v  =  1 : length(varn)
     avname  = char(varn(v));
     
     if~(strcmp(avname,'iceh'))
-        files=dir([direc, 'ocean-3d-', avname,'*.nc']);
+        files=dir([direc, avname,'*.nc']);
     else
         files = dir([direc,'iceh.*.nc']);
     end

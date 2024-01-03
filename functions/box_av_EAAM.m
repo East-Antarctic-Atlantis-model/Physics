@@ -25,7 +25,7 @@
 %                       % don't have problems of hiperdifusion
 % dlev = [0  20 50 100 200 300 400 750 1000 2000 5000]; %% This structure is related with the biology                                 %% and with the maximum deph in the BMG model
 % 
-% varn = {'salt';  'temp';  'wt'; 'iceh'}
+% varn = {'salt';  'temp';  'wt'}
 % 
 % fnm = '/datasets/work/oa-alantis/work/Hydro_EAA/ocean-3d-salt-1-daily-mean-ym_1999_01.nc'
 % fnm='/datasets/work/oa-alantis/work/Hydro_EAA/iceh.1999-01-daily.nc'
@@ -34,7 +34,7 @@
 % varn = 'iceh'
 % % %
 % fln=1
-function [av,nav] = box_av_SS(vert, varn, dlev, fnm, fln)
+function [av,nav] = box_av_EAAM(vert, varn, dlev, fnm, fln)
  %% Global Variables  %%
 %  ncdisp(fnm)
     nc   = netcdf.open(fnm);
@@ -106,12 +106,12 @@ if ~exist(file2, 'file') % This part need to be run only ones. its related
         if strcmp( varn, 'SG_N') || strcmp( varn, 'EpiPAR') %% ICE?
             varData = permute(netcdf.getVar(nc, netcdf.inqVarID(nc, varn), [0, 0, 0, id],[719, 458, 75, 1],'double'), [2 1]);
         else
-            varData = permute(netcdf.getVar(nc, netcdf.inqVarID(nc, varn), [0, 0, 0, id],[719, 458, 75, 1],'double'), [3 2 1]);
+            varData = permute(netcdf.getVar(nc, netcdf.inqVarID(nc, varn), [0, 0, 0, id],[720, 458, 75, 1],'double'), [3 2 1]);
         end
         imodxy = find(~isnan(lon));
         xlon   = lon(imodxy);
         ylat   = lat(imodxy);
-        varData(varData >= 1.0e+16) = nan;
+        varData(varData >= 1.0e+16) = NaN;
         if ~(strcmp( varn, 'SG_N') || strcmp( varn, 'EpiPAR'))
              for layer = 1 : nlay
                  layer_var_data = squeeze(mean(varData(zc <= -dlev(layer) & zc >= -dlev(layer+1), :, :), 1, 'double','omitnan'));
