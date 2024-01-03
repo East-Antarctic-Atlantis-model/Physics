@@ -142,6 +142,8 @@ vert = load(['/datasets/work/oa-alantis/work/EA_model/Variable_raw/Av_wt.mat']);
 
 %% Writing variables
 temperature = temp.Av_final;
+%% Changing from Kelvin to Celcius
+temperature = temperature - 273.15;
 salinity    = salt.Av_final;
 vertical    = vert.Av_final;
 %% Saving the netdf file
