@@ -7,7 +7,7 @@ library('tidyverse')
 library("dplyr")
 library(shinyrAtlantis)
 
-
+source('/home/por07g/Documents/Code_Tools/shinyRAtlantis/Fork_git/shinyrAtlantis/R/shforce.R')
 exchange.file    <- 'Creating_Hydro/out_EAAM/EAAM_hydro.nc'
 salinity.file    <- "Creating_Hydro/out_EAAM/EAAM_salt.nc"       # this file is not included in the package
 temperature.file <- "Creating_Hydro/out_EAAM/EAAM_temp.nc"       # this file is not included in the package
@@ -22,4 +22,5 @@ input.object <- make.sh.forcings.object(
   salinity.file    = salinity.file
 )
 
+debug(sh.forcings)
 sh.forcings(input.object)
